@@ -1,0 +1,22 @@
+SRCS = $(wildcard *.c)
+OBJS =$(patsubst %.c,%.o,$(SRCS))
+TARGET = calc
+.PHONY: clean all post-install pre-install
+OUTPUT = build
+
+all : pre-install $(TARGET) post-install
+
+$(TARGET) : $(OBJS)
+	$(CC) -o $@ $^
+
+%.o : %.c
+	$(CC) $< -c -o $@ 
+
+pre-install : 
+	@if [ ! -d ${OUTPUT} ]; \
+            then  mkdir ${OUTPUT}; \
+    fi;
+post-install :
+	mv $(TARGET) $(OBJS) $(OUTPUT)
+clean :
+	rm -rf $(OUTPUT)
